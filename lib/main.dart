@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mermer_test_basic/firebase_options.dart';
 
@@ -61,10 +65,29 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
+            ElevatedButton(
+              onPressed: () async {
+                final credential = await FirebaseAuth.instance
+                    .signInWithEmailAndPassword(
+                        email: "mincoln419@naver.com", password: "123456");
+                print(credential);
+              },
+              child: const Text('로그인'),
+            ),
+            const Divider(),
             ElevatedButton(onPressed: () async{
-              final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: "mincoln419@naver.com", password: "123456");
-              print(credential);
-            }, child: const Text('로그인'),)
+              FilePickerResult? result = await FilePicker.platform.pickFiles();
+              if(result !=null){
+                File file = File(result.files.single.path ?? "");
+                debugPrint(file.path);
+                try{
+                  await FirebaseStorage.instance.ref("image/${DateTime.now().millisecondsSinceEpoch}.jpg")
+                  .putFile(file);
+                }on FirebaseException catch(e){
+                  debugPrint(e.message);
+                }
+              }
+            }, child: const Text("파일업로드")),
           ],
         ),
       ),
@@ -74,10 +97,10 @@ class _MyHomePageState extends State<MyHomePage> {
             final userCredential = await FirebaseAuth.instance
                 .createUserWithEmailAndPassword(
                     email: "mincoln419@naver.com", password: "123456");
-          } on FirebaseAuthException catch(e) {
-            if(e.code == "weak-password"){
+          } on FirebaseAuthException catch (e) {
+            if (e.code == "weak-password") {
               print("비밀번호를 강화해주세요");
-            }else if(e.code == "email-already-in-use"){
+            } else if (e.code == "email-already-in-use") {
               print("이미 등록된 이메일이 있습니다");
             }
           }
