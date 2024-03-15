@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "989424967584",
+    "firebase_url": "https://mermer-test-basic-81a08-default-rtdb.firebaseio.com",
+    "project_id": "mermer-test-basic-81a08",
+    "storage_bucket": "mermer-test-basic-81a08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989424967584:android:07a253fb262641bac24ec5",
+        "android_client_info": {
+          "package_name": "com.mermer.flutter_mermer_test_basic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJaw_sK0MrSOwpzhIDmJ7sy5agWeFjW88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989424967584:android:b18a706fa2c81403c24ec5",
+        "android_client_info": {
+          "package_name": "com.mermer.repo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJaw_sK0MrSOwpzhIDmJ7sy5agWeFjW88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
