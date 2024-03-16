@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mermer_test_basic/firebase_options.dart';
@@ -75,19 +78,76 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('로그인'),
             ),
             const Divider(),
-            ElevatedButton(onPressed: () async{
-              FilePickerResult? result = await FilePicker.platform.pickFiles();
-              if(result !=null){
-                File file = File(result.files.single.path ?? "");
-                debugPrint(file.path);
-                try{
-                  await FirebaseStorage.instance.ref("image/${DateTime.now().millisecondsSinceEpoch}.jpg")
-                  .putFile(file);
-                }on FirebaseException catch(e){
-                  debugPrint(e.message);
-                }
-              }
-            }, child: const Text("파일업로드")),
+            ElevatedButton(
+                onPressed: () async {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles();
+                  if (result != null) {
+                    File file = File(result.files.single.path ?? "");
+                    debugPrint(file.path);
+                    try {
+                      await FirebaseStorage.instance
+                          .ref(
+                              "image/${DateTime.now().millisecondsSinceEpoch}.jpg")
+                          .putFile(file);
+                    } on FirebaseException catch (e) {
+                      debugPrint(e.message);
+                    }
+                  }
+                },
+                child: const Text("파일업로드")),
+            const Divider(),
+            ElevatedButton(
+                onPressed: () async {
+                  await FirebaseFirestore.instance
+                      .collection("counter")
+                      .doc("LsjUaNwNSwsCQMJtuc4b")
+                      .update({
+                    "value": 13,
+                    "timestamp": Timestamp.now(),
+                  });
+                  // await FirebaseFirestore.instance
+                  //     .collection("test")
+                  //     .doc("flutter")
+                  //     .set({
+                  //   "value": 10
+                  // });
+                },
+                child: const Text("Cloud Storage 데이터쓰기")),
+            ElevatedButton(
+                onPressed: () async {
+                  final snapshot = await FirebaseFirestore.instance
+                      .collection("counter")
+                      .get();
+                  for (var el in snapshot.docs) {
+                    print(el.data());
+                  }
+                  // await FirebaseFirestore.instance
+                  //     .collection("test")
+                  //     .doc("flutter")
+                  //     .set({
+                  //   "value": 10
+                  // });
+                },
+                child: const Text("Cloud Storage 데이터읽기")),
+            const Divider(),
+            ElevatedButton(
+              onPressed: () async {
+                await FirebaseDatabase.instance.ref().push().set({
+                  "age": 23,
+                  "name":"foo",
+                  "nickname":"bar",
+                });
+              },
+              child: const Text("Realtime DB 데이터쓰기"),
+            ),
+        ElevatedButton(
+          onPressed: () async {
+            final data = await FirebaseDatabase.instance.ref().get();
+            print(data.value);
+          },
+          child: const Text("Realtime DB 데이터읽기"),
+        ),
           ],
         ),
       ),
